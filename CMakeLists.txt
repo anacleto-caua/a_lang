@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.21)
 
-set(APP_NAME "a_lang") 
+set(APP_NAME "a_lang")
+
+# So Windows won't break sqlite
+add_compile_definitions(NOMINMAX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(${APP_NAME} LANGUAGES CXX)
 
@@ -18,9 +24,21 @@ set(Slint_COMPILER "${CMAKE_CURRENT_SOURCE_DIR}/libs/slint/bin/slint-compiler.ex
 
 find_package(Slint)
 
-add_executable(${APP_NAME} src/main.cpp)
+add_executable(${APP_NAME} 
+    src/main.cpp 
+    src/sqlite3/sqlite3.c
+)
 
-target_link_libraries(${APP_NAME} PRIVATE Slint::Slint)
+# Include directories
+target_include_directories( ${APP_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/sqlite3
+)
+
+# Link libraries
+target_link_libraries(${APP_NAME} PRIVATE
+    Slint::Slint
+)
+
 slint_target_sources(${APP_NAME} ui/mother_window.slint)
 
 # On Windows, copy the Slint DLL next to the application binary
@@ -30,6 +48,11 @@ if(WIN32)
         COMMAND_EXPAND_LISTS
         COMMENT " -- Copying Slint DLLs to output directory..."
     )
+endif()
+
+# Needed by sqlite3.c on some systems
+if(UNIX)
+    target_link_libraries(${APP_NAME} pthread dl)
 endif()
 
 # Run Target
