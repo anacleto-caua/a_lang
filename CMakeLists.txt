@@ -21,7 +21,7 @@ find_package(Slint)
 add_executable(${APP_NAME} src/main.cpp)
 
 target_link_libraries(${APP_NAME} PRIVATE Slint::Slint)
-slint_target_sources(${APP_NAME} ui/app-window.slint)
+slint_target_sources(${APP_NAME} ui/mother_window.slint)
 
 # On Windows, copy the Slint DLL next to the application binary
 if(WIN32)

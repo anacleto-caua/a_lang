@@ -1,0 +1,52 @@
+// Copyright © SixtyFPS GmbH <info@slint.dev>
+// SPDX-License-Identifier: MIT
+
+import { HorizontalBox, VerticalBox, ListView, StandardListView, GroupBox, ComboBox, GridBox } from "std-widgets.slint";
+import { GallerySettings } from "../gallery_settings.slint";
+import { Page } from "page.slint";
+
+export component DictionaryPage inherits Page {
+    title: @tr("DictionaryPage");
+    show-enable-switch: false;
+    description: @tr("Should be a dictionary");
+
+    HorizontalBox {
+        Text {
+            text: "List";
+        }
+    }
+
+    HorizontalBox {
+        vertical-stretch: 1;
+        GroupBox {
+            title: @tr("ListView");
+
+            ListView {
+                vertical-scrollbar-policy: as-needed;
+                horizontal-scrollbar-policy: as-needed;
+                vertical-stretch: 0;
+                for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] : VerticalLayout {
+                    width:  100%;
+                    HorizontalBox {
+                        width:  100%;
+                        Text {
+                            text: @tr("Item {}", i);
+                            font-size: 12pt;
+                        }
+                    }
+                    HorizontalBox {
+                        width:  100%;
+                        min-height: 25px;
+                        padding-left: 25px;
+                        padding-right: 25px;
+                        Text {
+                            font-size: 12pt;
+                            wrap: word-wrap;
+                            text: "Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description Lorem Ipsum dolor sit amet description ";
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
