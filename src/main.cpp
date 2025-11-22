@@ -37,8 +37,8 @@ std::filesystem::path get_executable_dir() {
 
 int main()
 {
-    // auto ui = MotherWindow::create();
-    // ui->run();
+    auto ui = MotherWindow::create();
+    ui->run();
 
     const std::filesystem::path DB_PATH = get_executable_dir().parent_path() / "data" / "dictionary.db";
 
