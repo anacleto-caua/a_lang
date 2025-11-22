@@ -1,13 +1,62 @@
+#include "sqlite3/sqlite3.h"
 #include <iostream>
 #include <string>
+#include <filesystem>
+
+// OS Specific headers
+#ifdef _WIN32
+    #include <windows.h>
+#elif __linux__
+    #include <unistd.h>
+    #include <limits.h>
+#endif
+
 #include <sqlite3.h>
 
 #include "mother_window.h"
 
+std::filesystem::path get_executable_dir() {
+    char buffer[1024];
+    std::string path = "";
+
+    #ifdef _WIN32
+        if (GetModuleFileNameA(NULL, buffer, sizeof(buffer))) {
+            path = buffer;
+        }
+    #elif __linux__
+        ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer));
+        if (count != -1) {
+            path = std::string(buffer, count);
+        }
+    #endif
+
+    if (path.empty()) return std::filesystem::current_path(); // Fallback
+
+    return std::filesystem::path(path).parent_path();
+}
+
 int main()
 {
-    auto ui = MotherWindow::create();
+    // auto ui = MotherWindow::create();
+    // ui->run();
 
-    ui->run();
+    const std::filesystem::path DB_PATH = get_executable_dir().parent_path() / "data" / "dictionary.db";
+
+    sqlite3* db;
+    int rc = sqlite3_open(DB_PATH.string().c_str(), &db);
+
+    if (rc != SQLITE_OK) {
+        std::cerr << "Cannot open database at: " << DB_PATH << "\n";
+        std::cerr << "Error: " << sqlite3_errmsg(db) << "\n";
+        sqlite3_close(db);
+        return 1;
+    }
+
+    std::cout << "Opened database successfully at: " << DB_PATH << "\n";
+
+    // ... use the db ...
+
+    sqlite3_close(db);
+
     return 0;
 }
