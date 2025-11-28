@@ -28,6 +28,20 @@
             }
         },
         {
+            "name": "windows-clang",
+            "displayName": "Windows (Clang-CL)",
+            "inherits": "windows-base",
+            "environment": {
+                "CC": "clang-cl",
+                "CXX": "clang-cl"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl",
+                "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded" 
+            }
+        },
+        {
             "name": "windows-release",
             "displayName": "Windows (Ninja/CL)",
             "inherits": "windows-base"

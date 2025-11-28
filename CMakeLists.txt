@@ -46,18 +46,15 @@ find_package(Slint)
 
 add_executable(${APP_NAME} 
     src/main.cpp 
-<<<<<<< HEAD
-)
-=======
-    src/sqlite3/sqlite3.c
 )
 
 # Include directories
-target_include_directories(${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src/sqlite3)
->>>>>>> 3ffabff3fa575f2759c1219ca3416218dc1c97ee
-
+target_include_directories(${APP_NAME} PRIVATE 
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/src/libs/include # Point to the folder containing json.hpp
+)
 # Link libraries
-target_link_libraries(a_lang PRIVATE Slint::Slint)
+target_link_libraries(${APP_NAME} PRIVATE Slint::Slint)
 
 slint_target_sources(${APP_NAME} ui/mother_window.slint)
 
