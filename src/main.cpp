@@ -1,4 +1,3 @@
-// #include <iostream>
 #include <string>
 #include <filesystem>
 
@@ -9,7 +8,6 @@
     #include <unistd.h>
     #include <limits.h>
 #endif
-
 
 #include "mother_window.h"
 
