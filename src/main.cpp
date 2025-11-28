@@ -1,4 +1,3 @@
-#include "sqlite3/sqlite3.h"
 #include <iostream>
 #include <string>
 #include <filesystem>
@@ -11,7 +10,6 @@
     #include <limits.h>
 #endif
 
-#include <sqlite3.h>
 
 #include "mother_window.h"
 
@@ -37,26 +35,10 @@ std::filesystem::path get_executable_dir() {
 
 int main()
 {
-    // auto ui = MotherWindow::create();
-    // ui->run();
+    auto ui = MotherWindow::create();
+    ui->run();
 
     const std::filesystem::path DB_PATH = get_executable_dir().parent_path() / "data" / "dictionary.db";
-
-    sqlite3* db;
-    int rc = sqlite3_open(DB_PATH.string().c_str(), &db);
-
-    if (rc != SQLITE_OK) {
-        std::cerr << "Cannot open database at: " << DB_PATH << "\n";
-        std::cerr << "Error: " << sqlite3_errmsg(db) << "\n";
-        sqlite3_close(db);
-        return 1;
-    }
-
-    std::cout << "Opened database successfully at: " << DB_PATH << "\n";
-
-    // ... use the db ...
-
-    sqlite3_close(db);
 
     return 0;
 }

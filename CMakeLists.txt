@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.21)
 
 set(APP_NAME "a_lang")
 
-# So Windows won't break sqlite
 add_compile_definitions(NOMINMAX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -26,12 +25,6 @@ find_package(Slint)
 
 add_executable(${APP_NAME} 
     src/main.cpp 
-    src/sqlite3/sqlite3.c
-)
-
-# Include directories
-target_include_directories( ${APP_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/sqlite3
 )
 
 # Link libraries
@@ -50,7 +43,6 @@ if(WIN32)
     )
 endif()
 
-# Needed by sqlite3.c on some systems
 if(UNIX)
     target_link_libraries(${APP_NAME} pthread dl)
 endif()
