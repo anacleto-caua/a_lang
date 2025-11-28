@@ -1,26 +1,24 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
-
 import { CheckBox, StandardListView, ListView } from "std-widgets.slint";
-import { AboutPage, DictionaryPage } from "./assets/pages/pages.slint";
 import { GallerySettings } from "./assets/gallery_settings.slint";
 import { SideBar } from "./assets/side_bar.slint";
+import { CardPage } from "./assets/pages/card_page.slint";
+import { CardData } from "./assets/cards/card_data_struct.slint";
 
 export component MotherWindow inherits Window {
     preferred-width: 1600px;
     preferred-height: 800px;
-    title: @tr("Slint Widgets Gallery");
+    title: @tr("Card");
 
-    HorizontalLayout {
-        side-bar := SideBar {
-            title: @tr("Tabs");
-            model: [
-                @tr("Menu" => "Dictionary"), 
-                @tr("Menu" => "About")
-            ];
+    in property <CardData> current_card;
+    callback fetch_card_from_cpp();
+
+    CardPage {
+        width: 100%;
+        height: 100%;
+        active-card: root.current_card;
+
+        trigger_fetch => {
+            root.fetch_card_from_cpp();
         }
-
-        if(side-bar.current-item == 0) : DictionaryPage {}
-        if(side-bar.current-item == 5) : AboutPage {}
     }
 }

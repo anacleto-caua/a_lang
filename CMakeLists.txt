@@ -51,13 +51,18 @@ add_executable(${APP_NAME}
 # Include directories
 target_include_directories(${APP_NAME} PRIVATE 
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/src/libs/include # Point to the folder containing json.hpp
+    ${CMAKE_SOURCE_DIR}/libs/include # Point to the folder containing json.hpp
 )
 # Link libraries
 target_link_libraries(${APP_NAME} PRIVATE Slint::Slint)
 
-slint_target_sources(${APP_NAME} ui/mother_window.slint)
+slint_target_sources(${APP_NAME} 
+    ui/mother_window.slint
+)
 
+set(ASSETS_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/data")
+set(ASSETS_DEST "${CMAKE_CURRENT_BINARY_DIR}/data")
+file(COPY ${ASSETS_SOURCE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # On Windows, copy the Slint DLL next to the application binary
 if(WIN32)

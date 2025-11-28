@@ -1,0 +1,54 @@
+import { VerticalBox } from "std-widgets.slint";
+import { CardData } from "card_data_struct.slint";
+
+export component Card inherits Rectangle {
+    in property <CardData> card-data;
+    callback request_new_card();
+    in-out property <bool> flipped: false;
+
+    width: 100%;
+    height: 100%;
+
+    TouchArea {
+        width: 100%;
+        height: 100%;
+        clicked => {
+            if (root.flipped) {
+                root.request_new_card();
+                root.flipped = false;
+            } else {
+                root.flipped = true;
+            }
+        }
+    }
+
+    Rectangle {
+        visible: !root.flipped;
+        background: #2c3e50;
+        border-radius: 15px;
+
+        VerticalBox {
+            alignment: center;
+            Text { 
+                text: root.card-data.front_text; 
+                font-size: 24px; color: white; 
+                horizontal-alignment: center;
+            }
+        }
+    }
+
+    Rectangle {
+        visible: root.flipped;
+        background: #3498db;
+        border-radius: 15px;
+
+        VerticalBox {
+            alignment: center;
+            Text { 
+                text: root.card-data.back_text; 
+                font-size: 30px; color: white; 
+                horizontal-alignment: center;
+            }
+        }
+    }
+}
