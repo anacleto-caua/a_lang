@@ -18,21 +18,49 @@ endif()
 
 # Setup Slint
 set(ENV{SLINT_STYLE} "fluent")
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/slint/lib/cmake/Slint")
-set(Slint_COMPILER "${CMAKE_CURRENT_SOURCE_DIR}/libs/slint/bin/slint-compiler.exe")
+
+if(WIN32)
+    # --- WINDOWS CONFIGURATION ---
+    # Define the root path for Windows Slint
+    set(SLINT_BASE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/win_slint")
+    
+    # Point to the .exe compiler
+    set(Slint_COMPILER "${SLINT_BASE_PATH}/bin/slint-compiler.exe")
+
+elseif(UNIX)
+    # --- LINUX CONFIGURATION ---
+    # Define the root path for Linux Slint
+    set(SLINT_BASE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libs/linux_slint")
+    
+    # Point to the binary (no extension)
+    set(Slint_COMPILER "${SLINT_BASE_PATH}/bin/slint-compiler")
+    
+    # Tell the executable where to look for .so files at runtime (RPATH)
+    set(CMAKE_BUILD_RPATH "${SLINT_BASE_PATH}/lib")
+endif()
+
+# Add the cmake config path (Works for both as long as the internal structure is standard)
+list(APPEND CMAKE_PREFIX_PATH "${SLINT_BASE_PATH}/lib/cmake/Slint")
 
 find_package(Slint)
 
 add_executable(${APP_NAME} 
     src/main.cpp 
+<<<<<<< HEAD
 )
+=======
+    src/sqlite3/sqlite3.c
+)
+
+# Include directories
+target_include_directories(${APP_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src/sqlite3)
+>>>>>>> 3ffabff3fa575f2759c1219ca3416218dc1c97ee
 
 # Link libraries
-target_link_libraries(${APP_NAME} PRIVATE
-    Slint::Slint
-)
+target_link_libraries(a_lang PRIVATE Slint::Slint)
 
 slint_target_sources(${APP_NAME} ui/mother_window.slint)
+
 
 # On Windows, copy the Slint DLL next to the application binary
 if(WIN32)
@@ -44,7 +72,7 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    target_link_libraries(${APP_NAME} pthread dl)
+    target_link_libraries(${APP_NAME} PRIVATE pthread dl)
 endif()
 
 # Run Target
